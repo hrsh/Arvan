@@ -1,0 +1,18 @@
+@url = https://localhost:5001/api/catalog
+@id = 607339473c24f6522b4ed480
+
+###
+GET {{url}}
+
+###
+GET {{url}}/{{id}}
+
+###
+POST {{url}}
+Content-Type: application/json
+
+{
+    "name": "CPU",
+    "description": "Cenetr processor unit usage per hour (IRR)",
+    "price": 1150
+}
