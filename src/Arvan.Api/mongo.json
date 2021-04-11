@@ -1,7 +1,7 @@
 {
 	"mongo": {
-		"connectionstring": "mongodb://localhost:27017",
-		"database": "my-db",
-		"document": "Catalog"
+		"host": "localhost",
+		"port": "27017",
+		"database": "my-db"
 	}
 }
