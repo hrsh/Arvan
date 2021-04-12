@@ -1,10 +1,11 @@
-using Mongo.Generic.Driver.Core;
-
 namespace Arvan.Api.Models
 {
-    [DocumentName(nameof(Catalog))]
-    public class Catalog : MongoEntityBase
+    using System;
+
+    public class Catalog
     {
+        public Guid Id { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }

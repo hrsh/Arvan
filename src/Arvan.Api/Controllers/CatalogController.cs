@@ -5,7 +5,7 @@ using Arvan.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Mongo.Generic.Driver.Core;
+using System;
 
 namespace Arvan.Api.Controllers
 {
@@ -27,11 +27,11 @@ namespace Arvan.Api.Controllers
 
         [HttpGet]
         public IEnumerable<Catalog> GetCatalogs() =>
-            _repository.List(a => a.Name, DocumentSortOrder.Asc);
+            _repository.List(a => a.Price > 0);
 
         [HttpGet("{id}")]
-        public async Task<Catalog> GetCatalog(string id, CancellationToken ct) =>
-            await _repository.FindAsync(a => a.Id == id, ct);
+        public async Task<Catalog> GetCatalog(Guid id, CancellationToken ct) =>
+            await _repository.FindAsync(a => a.Id, id, ct);
 
         [HttpPost]
         public IActionResult Create([FromBody] Catalog model)
@@ -39,5 +39,26 @@ namespace Arvan.Api.Controllers
             _repository.Create(model);
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+        {
+            await _repository.DeleteAsync(a => a.Id == id, ct);
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(
+            Guid id,
+            [FromBody] Catalog model,
+            CancellationToken ct)
+        {
+            await _repository
+                .UpdateAsync(id, a => a.Id, model, ct);
+
+            //await _repository.UpdateAsync(a => a.Id == id, model, ct);
+            return NoContent();
+        }
+
     }
 }

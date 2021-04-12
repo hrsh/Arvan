@@ -1,11 +1,29 @@
 @url = https://localhost:5001/api/catalog
-@id = 607339473c24f6522b4ed480
+@id = b428611a-00f5-44cb-b856-18e5209cebf3
+@id2 = e41c8899-943b-4e16-9f6b-c1355a1088de
+@id3 = 616264a8-a2ca-4584-b2a9-b2fab4c56a13
+
+
+@del = e41c8899-943b-4e16-9f6b-c1355a1088de
 
 ###
 GET {{url}}
 
 ###
-GET {{url}}/{{id}}
+GET {{url}}/{{id3}}
+
+###
+GET {{url}}/{{id2}}
+
+###
+POST {{url}}
+Content-Type: application/json
+
+{
+    "name": "Support",
+    "description": "Customer support per month (IRR)",
+    "price": 10000
+}
 
 ###
 POST {{url}}
@@ -13,6 +31,30 @@ Content-Type: application/json
 
 {
     "name": "CPU",
-    "description": "Cenetr processor unit usage per hour (IRR)",
-    "price": 1150
+    "description": "Central unit processor per hour (IRR)",
+    "price": 1250
+}
+
+###
+POST {{url}}
+Content-Type: application/json
+
+{
+    "name": "RAM",
+    "description": "Random access memory per hour (IRR)",
+    "price": 780
+}
+
+###
+DELETE {{url}}/{{del}}
+
+###
+PUT {{url}}/2c531f8d-5fa0-457d-8830-cd232eb82ccf
+Content-Type: application/json
+
+{
+    "name": "RAM",
+    "description": "Random access memory per hour (IRR)",
+    "price": 800,
+    "id": "2c531f8d-5fa0-457d-8830-cd232eb82ccf"
 }

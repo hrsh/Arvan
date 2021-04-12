@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Mongo.Generic.Driver.Core;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
 
 namespace Arvan.Api
 {
@@ -17,7 +20,24 @@ namespace Arvan.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGenericMongo();
+            BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+            BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
+
+            services.Configure<MongoOptions>(
+                _configuration.GetSection(nameof(MongoOptions)),
+                opt => _configuration.Bind(opt));
+
+            services.AddSingleton<IMongoClient>(m =>
+            {
+                var settings = _configuration
+                    .GetSection(nameof(MongoOptions))
+                    .Get<MongoOptions>();
+                return new MongoClient(settings.ConnectionString);
+            });
+
+            services.AddScoped(
+                typeof(IMongoRepository<>),
+                typeof(MongoRepository<>));
             services.AddControllers();
         }
 
@@ -26,9 +46,9 @@ namespace Arvan.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseHttpsRedirection();
             }
 
-            app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseEndpoints(e =>
