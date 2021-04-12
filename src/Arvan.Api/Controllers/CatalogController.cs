@@ -26,8 +26,10 @@ namespace Arvan.Api.Controllers
         (_logger, _repository, _options) = (logger, repository, options.Value);
 
         [HttpGet]
-        public IEnumerable<Catalog> GetCatalogs() =>
-            _repository.List(a => a.Price > 0);
+        public IEnumerable<Catalog> GetCatalogs()
+        {
+            return _repository.List(a => a.Price > 0);
+        }
 
         [HttpGet("{id}")]
         public async Task<Catalog> GetCatalog(Guid id, CancellationToken ct) =>

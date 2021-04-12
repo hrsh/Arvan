@@ -27,8 +27,6 @@ namespace Arvan.Api
             _options = options.Value;
             _logger = logger;
 
-            _logger.LogInformation(options.Value.ConnectionString);
-
             var database = client.GetDatabase(options.Value.Database);
             _collections = database.GetCollection<TEntity>(options.Value.Collection);
         }

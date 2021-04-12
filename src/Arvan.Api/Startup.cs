@@ -23,17 +23,18 @@ namespace Arvan.Api
             BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
             BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
 
-            services.Configure<MongoOptions>(
-                _configuration.GetSection(nameof(MongoOptions)),
-                opt => _configuration.Bind(opt));
+            var settings = _configuration
+                .GetSection(nameof(MongoOptions))
+                .Get<MongoOptions>();
 
             services.AddSingleton<IMongoClient>(m =>
             {
-                var settings = _configuration
-                    .GetSection(nameof(MongoOptions))
-                    .Get<MongoOptions>();
                 return new MongoClient(settings.ConnectionString);
             });
+
+            services.Configure<MongoOptions>(
+               _configuration.GetSection(nameof(MongoOptions)),
+               opt => _configuration.Bind(opt));
 
             services.AddScoped(
                 typeof(IMongoRepository<>),
